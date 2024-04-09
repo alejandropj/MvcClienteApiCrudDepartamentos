@@ -1,5 +1,7 @@
 ﻿using MvcClienteApiCrudDepartamentos.Models;
+using Newtonsoft.Json;
 using System.Net.Http.Headers;
+using System.Text;
 
 namespace MvcClienteApiCrudDepartamentos.Services
 {
@@ -61,6 +63,45 @@ namespace MvcClienteApiCrudDepartamentos.Services
                 HttpResponseMessage response = await client.DeleteAsync(request);
                 //return response.StatusCode;
             }
+        }        
+        public async Task InsertDepartamentoAsync(int idDepartamento,string nombre, string localidad)
+        {
+            using (HttpClient client = new HttpClient())
+            {
+                string request = "api/departamentos";
+                client.BaseAddress = new Uri(this.UrlApi);
+                client.DefaultRequestHeaders.Clear();
+                client.DefaultRequestHeaders.Accept.Add(this.header);
+
+                Departamento dept = new Departamento();
+                dept.IdDepartamento = idDepartamento;
+                dept.Nombre = nombre;
+                dept.Localidad = localidad;
+                string json = JsonConvert.SerializeObject(dept);
+                StringContent content = new StringContent(json, Encoding.UTF8, "application/json");
+                HttpResponseMessage response = await client.PostAsync(request, content);
+
+            }
+        }        
+        public async Task UpdateDepartamentoAsync(int idDepartamento,string nombre, string localidad)
+        {
+            using (HttpClient client = new HttpClient())
+            {
+                string request = "api/departamentos";
+                client.BaseAddress = new Uri(this.UrlApi);
+                client.DefaultRequestHeaders.Clear();
+                client.DefaultRequestHeaders.Accept.Add(this.header);
+
+                Departamento dept = new Departamento();
+                dept.IdDepartamento = idDepartamento;
+                dept.Nombre = nombre;
+                dept.Localidad = localidad;
+                string json = JsonConvert.SerializeObject(dept);
+                StringContent content = new StringContent(json, Encoding.UTF8, "application/json");
+                HttpResponseMessage response = await client.PutAsync(request, content);
+
+            }
         }
+
     }
 }
